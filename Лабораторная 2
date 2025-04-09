@@ -1,0 +1,175 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Предварительные объявления классов
+class Weapon;
+class Monster;
+
+class Character {
+private:
+    string name;
+    int health;
+    int attack;
+    int defense;
+
+public:
+    // Конструктор
+    Character(const string& n, int h, int a, int d)
+        : name(n), health(h), attack(a), defense(d) {
+        cout << "Character " << name << " created!\n";
+    }
+
+    // Деструктор
+    ~Character() {
+        cout << "Character " << name << " destroyed!\n";
+    }
+
+    void displayInfo() const {
+        cout << "Name: " << name << ", HP: " << health
+            << ", Attack: " << attack << ", Defense: " << defense << endl;
+    }
+
+    // Метод для атаки (объявление)
+    void attackWith(Weapon& weapon, Monster& target);
+
+    string getName() const { return name; }
+    int getHealth() const { return health; }
+    int getAttack() const { return attack; }
+    int getDefense() const { return defense; }
+
+    // Сеттер для здоровья
+    void setHealth(int h) { health = h; }
+};
+
+class Weapon {
+private:
+    string name;
+    int damage;
+    double weight;
+
+public:
+    // Конструктор
+    Weapon(const string& n, int d, double w)
+        : name(n), damage(d), weight(w) {
+        cout << "Weapon " << name << " created!\n";
+    }
+
+    // Деструктор
+    ~Weapon() {
+        cout << "Weapon " << name << " destroyed!\n";
+    }
+
+    // Метод для вывода информации об оружии
+    void displayInfo() const {
+        cout << "Weapon: " << name << ", Damage: " << damage
+            << ", Weight: " << weight << "kg\n";
+    }
+
+    int getDamage() const { return damage; }
+    string getName() const { return name; }
+};
+
+class Monster {
+private:
+    string name;
+    int health;
+    int attack;
+    int defense;
+
+public:
+    // Конструктор
+    Monster(const string& n, int h, int a, int d)
+        : name(n), health(h), attack(a), defense(d) {
+        cout << "Monster " << name << " created!\n";
+    }
+
+    // Деструктор
+    ~Monster() {
+        cout << "Monster " << name << " destroyed!\n";
+    }
+
+    void displayInfo() const {
+        cout << "Name: " << name << ", HP: " << health
+            << ", Attack: " << attack << ", Defense: " << defense << endl;
+    }
+
+    // Метод для получения урона
+    void takeDamage(int damage) {
+        int actualDamage = damage - defense / 2; // Учитываем защиту
+        if (actualDamage < 0) actualDamage = 0;
+        health -= actualDamage;
+        if (health < 0) health = 0;
+
+        cout << name << " takes " << actualDamage << " damage! ";
+        cout << "HP left: " << health << endl;
+    }
+
+    string getName() const { return name; }
+    int getHealth() const { return health; }
+    int getAttack() const { return attack; }
+    int getDefense() const { return defense; }
+};
+
+// Реализация метода атаки 
+void Character::attackWith(Weapon& weapon, Monster& target) {
+    cout << getName() << " attacks " << target.getName()
+        << " with " << weapon.getName() << "!\n";
+    int totalDamage = getAttack() + weapon.getDamage();
+    target.takeDamage(totalDamage);
+}
+
+int main() {
+    // Создаём персонажа и монстра
+    Character hero("Knight", 100, 15, 10);
+    Monster dragon("Necromancer", 100, 25, 20);
+
+    cout << "\n";
+
+    // Создаём оружие
+    Weapon Sword("Excalibur", 30, 7.8);
+    Weapon Staff("Staff of Dead", 40, 4.2);
+    Weapon Crossbow("Crossbow", 20, 2.3);
+
+    cout << "\n";
+
+    // Выводим информацию
+    hero.displayInfo();
+    dragon.displayInfo();
+
+    cout << "\nAvailable Weapons:\n";
+    Sword.displayInfo();
+    Staff.displayInfo();
+    Crossbow.displayInfo();
+
+    // Выбор оружия для атаки
+    cout << "Choose a weapon to attack (1 - Sword, 2 - Staff, 3 - Crossbow): ";
+    int choice;
+    cin >> choice;
+
+    Weapon* selectedWeapon = nullptr;
+    switch (choice) {
+    case 1:
+        selectedWeapon = &Sword;
+        break;
+    case 2:
+        selectedWeapon = &Staff;
+        break;
+    case 3:
+        selectedWeapon = &Crossbow;
+        break;
+    default:
+        cout << "Invalid choice, using sword by default.\n";
+        selectedWeapon = &Sword;
+    }
+
+    // Атака выбранным оружием
+    hero.attackWith(*selectedWeapon, dragon);
+
+    // Проверяем состояние после атаки
+    cout << "\nAfter attack:\n";
+    dragon.displayInfo();
+
+    return 0;
+}
