@@ -102,9 +102,9 @@ public:
     Goblin() : Monster("Goblin", 40, 15, 5) {}
 };
 
-class Skeleton : public Monster {
+class Elemental : public Monster {
 public:
-    Skeleton() : Monster("Skeleton", 20, 10, 2) {}
+    Elemental() : Monster("Elemental", 20, 10, 2) {}
 };
 
 template<typename T>
@@ -141,7 +141,7 @@ private:
     std::unique_ptr<Monster> spawnMonster() {
         int r = rand() % 4;
         if (r == 0 || r == 1 || r == 2) return std::make_unique<Goblin>();
-        return std::make_unique<Skeleton>();
+        return std::make_unique<Elemental>();
     }
 
     void battle(std::unique_ptr<Monster> monster) {
