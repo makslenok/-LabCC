@@ -222,10 +222,6 @@ int main() {
 
         acs.displayAllUsers();
 
-        //std::cout << "Checking errors...\n";
-        //acs.addUser(std::make_unique<Student>("Maria", 1, -1, "A22"));
-        //acs.addUser(std::make_unique<Teacher>("Alex", 3, 2, ""));
-        //acs.addUser(std::make_unique<Student>("", 5, 1, ""));
 
         Resource server("Server", 3);
         Resource lab("Laboratory", 2);
